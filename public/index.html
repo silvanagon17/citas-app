@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediFlow - Gestión de Citas Médicas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="logo-icon"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        <h1>MediFlow</h1>
+      </div>
+      <button class="btn btn-primary" id="btnOpenNewAppointment" aria-haspopup="dialog">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        Nueva Cita
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-container">
+    
+    <!-- Stats Section -->
+    <section class="stats-grid" aria-label="Estadísticas de citas">
+      <div class="stat-card">
+        <div class="stat-icon icon-blue">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Total Citas</span>
+          <span class="stat-value" id="statTotal">0</span>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon icon-yellow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Pendientes</span>
+          <span class="stat-value" id="statScheduled">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-green">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Completadas</span>
+          <span class="stat-value" id="statCompleted">0</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-red">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Canceladas</span>
+          <span class="stat-value" id="statCancelled">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content Area & Controls -->
+    <section class="content-header">
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">Todas</button>
+        <button class="filter-btn" data-filter="scheduled">Programadas</button>
+        <button class="filter-btn" data-filter="completed">Completadas</button>
+        <button class="filter-btn" data-filter="cancelled">Canceladas</button>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <div id="loadingIndicator" class="loading-container">
+      <div class="spinner"></div>
+      <p>Cargando citas...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="empty-state hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="empty-icon"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+      <h2>No hay citas registradas</h2>
+      <p>Comienza programando tu primera consulta médica haciendo clic en "Nueva Cita".</p>
+    </div>
+
+    <!-- Grid / List of appointments -->
+    <div id="appointmentsGrid" class="appointments-grid">
+      <!-- Citas se renderizan dinámicamente aquí -->
+    </div>
+  </main>
+
+  <!-- Notification Toast -->
+  <div id="notificationToast" class="toast hidden" role="alert" aria-live="assertive"></div>
+
+  <!-- Booking Modal Dialog -->
+  <dialog id="appointmentModal" closedby="any" class="modal-dialog" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2 id="modalTitle">Nueva Cita Médica</h2>
+        <button class="btn-close" id="btnCloseModal" aria-label="Cerrar modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </header>
+      <form id="appointmentForm" class="modal-body" novalidate>
+        <div class="form-group">
+          <label for="patientName">Nombre del Paciente <span class="required">*</span></label>
+          <input type="text" id="patientName" name="patientName" placeholder="Ej. Juan Pérez" required autocomplete="name">
+          <span class="error-message" id="errorPatientName">El nombre es requerido.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo Electrónico <span class="required">*</span></label>
+          <input type="email" id="email" name="email" placeholder="Ej. juan@example.com" required autocomplete="email">
+          <span class="error-message" id="errorEmail">Introduce un correo electrónico válido.</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Fecha <span class="required">*</span></label>
+            <input type="date" id="date" name="date" required>
+            <span class="error-message" id="errorDate">Selecciona una fecha válida.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="time">Hora <span class="required">*</span></label>
+            <input type="time" id="time" name="time" required>
+            <span class="error-message" id="errorTime">Selecciona una hora válida.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="service">Servicio Médico <span class="required">*</span></label>
+          <select id="service" name="service" required>
+            <option value="" disabled selected>Selecciona una especialidad</option>
+            <option value="Medicina General">Medicina General</option>
+            <option value="Odontología">Odontología</option>
+            <option value="Pediatría">Pediatría</option>
+            <option value="Cardiología">Cardiología</option>
+            <option value="Dermatología">Dermatología</option>
+            <option value="Nutrición">Nutrición</option>
+          </select>
+          <span class="error-message" id="errorService">Por favor, selecciona un servicio.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Notas o Sintomatología</label>
+          <textarea id="notes" name="notes" rows="3" placeholder="Describe brevemente el motivo de la consulta o notas relevantes..."></textarea>
+        </div>
+
+        <footer class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelModal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Agendar Cita
+          </button>
+        </footer>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Delete Confirmation Dialog -->
+  <dialog id="deleteConfirmModal" closedby="any" class="modal-dialog mini-modal" aria-labelledby="deleteModalTitle">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2 id="deleteModalTitle">¿Eliminar Cita?</h2>
+      </header>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar esta cita? Esta acción no se puede deshacer.</p>
+      </div>
+      <footer class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="btnCancelDelete">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDelete">Eliminar</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
